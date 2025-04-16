@@ -11,6 +11,7 @@ public class DeliverManagerUI : MonoBehaviour
     private void Awake()
     {
         recipeTemplate.gameObject.SetActive(false);
+        
     }
     private void Start()
     {
@@ -41,7 +42,8 @@ public class DeliverManagerUI : MonoBehaviour
         foreach (RecipeSO recipeSO in DeliveryManager.Instance.GetWaitingRecipeSOList())
         {
             Transform recipeTransform = Instantiate(recipeTemplate, container);
-            recipeTemplate.gameObject.SetActive(true);
+            recipeTransform.gameObject.SetActive(true);
+            recipeTransform.GetComponent<DeliverManagerSingleUI>().SetRecipeSO(recipeSO);
         }
     }
 }

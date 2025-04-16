@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 119bf66f9888492af912df471fa822ae, type: 3}
   m_Name: MEGABurger
   m_EditorClassIdentifier: 
-  waitingRecipeSOList:
-  - {fileID: 11400000, guid: 81590b74180e238ff9a755a17263175e, type: 2}
-  - {fileID: 11400000, guid: 017ce04e3f44cda549e2426cdc069a92, type: 2}
-  - {fileID: 11400000}
-  - {fileID: 11400000, guid: a368116f7bc556298a54058dc08b32a9, type: 2}
+  kitchenObjectSOList:
+  - {fileID: 11400000, guid: cf41737b8ef3df822a5b4f3f2342d3d5, type: 2}
+  - {fileID: 11400000, guid: cf53966c280c5a242a185206d9d17e68, type: 2}
+  - {fileID: 11400000, guid: 71c3a8e4a543988eaa38d343e9b3fa97, type: 2}
+  - {fileID: 11400000, guid: c1b0bc5568178e782b117226a631e0cf, type: 2}
+  - {fileID: 11400000, guid: 384a758d3a5ef143c9c335723a65e654, type: 2}
+  recipeName: MEGA Burger

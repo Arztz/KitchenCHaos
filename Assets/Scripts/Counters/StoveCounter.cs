@@ -49,7 +49,6 @@ public class StoveCounter : BaseCounter,IHasProgress
                         state =State.Fried;
                         burningTimer = 0f;
                         burningRecipeSO = GetBurningRecipeSOWithInput(fryingRecipeSO.output);
-                        print(burningRecipeSO);
                         OnStateChanged?.Invoke(this, new OnStateChangedEventArgs{
                             state = state
                         });
@@ -172,10 +171,8 @@ public class StoveCounter : BaseCounter,IHasProgress
     }
     private BurningRecipeSO GetBurningRecipeSOWithInput(KitchenObjectSO inputKitchenObjectSO){
         var cookedSO = GetKitchenObject().GetKitchenObjectSO();
-        print($"Trying to match {cookedSO.name}");
         foreach(BurningRecipeSO burningRecipeSO in burningRecipeSOArray)
         {
-            print($"Checking against {burningRecipeSO.input.name}");
             if(inputKitchenObjectSO == burningRecipeSO.input ){
 
                 return burningRecipeSO;

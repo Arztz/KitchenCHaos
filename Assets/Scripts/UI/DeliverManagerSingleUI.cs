@@ -1,47 +1,30 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class DeliverManagerSingleUI : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    [SerializeField] private Transform container;
-    [SerializeField] private Transform recipeTemplate;
-
+    [SerializeField] private TextMeshProUGUI recipeNameText;
+    [SerializeField] private Transform iconContainer;
+    [SerializeField] private Transform iconTemplate;
     private void Awake()
     {
-        recipeTemplate.gameObject.SetActive(false);
+        iconTemplate.gameObject.SetActive(false);
     }
-    private void Start()
-    {
-        DeliveryManager.Instance.OnRecipeSpawned += DeliveryManager_OnRecipeSpawned;
-        DeliveryManager.Instance.OnRecipeCompleted += DeliveryManager_OnRecipeCpmpleted;
+    public void SetRecipeSO(RecipeSO recipeSO){
 
-        UpdateVisual();
-    }
+        recipeNameText.text = recipeSO.recipeName;
 
-    private void DeliveryManager_OnRecipeCpmpleted(object sender, EventArgs e)
-    {
-        UpdateVisual();
-    }
-
-    private void DeliveryManager_OnRecipeSpawned(object sender, EventArgs e)
-    {
-        UpdateVisual();
-    }
-
-    private void UpdateVisual()
-    {
-        foreach (Transform child in container)
-        {
-            if (child == recipeTemplate) continue;
+        foreach(Transform child in iconContainer){
+            if(child == iconTemplate) continue;
             Destroy(child.gameObject);
         }
-
-        foreach (RecipeSO recipeSO in DeliveryManager.Instance.GetWaitingRecipeSOList())
-        {
-            Transform recipeTransform = Instantiate(recipeTemplate, container);
-            recipeTemplate.gameObject.SetActive(true);
+        foreach(KitchenObjectSO kitchenObjectSO in recipeSO.kitchenObjectSOList){
+            Transform iconTransform = Instantiate(iconTemplate,iconContainer);
+            iconTransform.gameObject.SetActive(true);
+            iconTransform.GetComponent<Image>().sprite = kitchenObjectSO.sprite;
         }
     }
 }

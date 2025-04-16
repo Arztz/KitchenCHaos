@@ -44,13 +44,16 @@ public class DeliveryManager : MonoBehaviour
             RecipeSO waitingRecipeSO = waitingRecipeSOList[i];
             if(waitingRecipeSO.kitchenObjectSOList.Count == plateKitchenObject.GetKitchenObjectSOList().Count){
                 //Has same number og ingredients
+
                 bool plateContentsMatchesRecipe = true;
                 foreach(KitchenObjectSO recipeKitchenObjectSO in waitingRecipeSO.kitchenObjectSOList){
                     //all ingredient in recipe
                     bool ingredientFound = false;
                     foreach(KitchenObjectSO plateKitchenObjectSO in plateKitchenObject.GetKitchenObjectSOList()){
                         //all ingredient in plate
-                        if(plateKitchenObject == recipeKitchenObjectSO){
+                        print(plateKitchenObjectSO);
+                        
+                        if(plateKitchenObjectSO == recipeKitchenObjectSO){
                             //ingredient match
                             ingredientFound = true;
                             break;

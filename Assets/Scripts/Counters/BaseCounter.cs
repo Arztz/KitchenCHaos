@@ -11,7 +11,6 @@ public class BaseCounter : MonoBehaviour,IKitchenObjectParent
     }
 
     public void SetKitchenObject(KitchenObject kitchenObject){
-        print("Set Kitchen Object: "+kitchenObject);
         this.kitchenObject = kitchenObject;
     }
     public KitchenObject GetKitchenObject(){
