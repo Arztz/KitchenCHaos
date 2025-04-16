@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+public class ContainerCouterVisual : MonoBehaviour
 {
     private const string OPEN_CLOSE = "OpenClose";
     [SerializeField] private ContainerCounter containerCounter;
