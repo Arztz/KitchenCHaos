@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using JetBrains.Annotations;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,7 +10,9 @@ public class DeliveryManager : MonoBehaviour
 {
     public event EventHandler OnRecipeSpawned;
     public event EventHandler OnRecipeCompleted;
-    public static DeliveryManager Instance{get; private set;}
+    public event EventHandler OnRecipeSuccess;
+    public event EventHandler OnRecipeFailed;
+    public static DeliveryManager Instance { get; private set; }
     [SerializeField] private RecipeListSO recipeListSO;
 
     private List<RecipeSO> waitingRecipeSOList;
@@ -17,68 +20,88 @@ public class DeliveryManager : MonoBehaviour
     private float spawnRecipeTimerMax = 4f;
 
     private int waitingRecipeMax = 4;
+    private int successRecipeAmount;
 
     private void Awake()
     {
         Instance = this;
         waitingRecipeSOList = new List<RecipeSO>();
+        successRecipeAmount = 0;
     }
     private void Update()
     {
         spawnRecipeTimer -= Time.deltaTime;
-        if(spawnRecipeTimer <= 0f){
+        if (spawnRecipeTimer <= 0f)
+        {
             spawnRecipeTimer = spawnRecipeTimerMax;
 
-            if(waitingRecipeSOList.Count < waitingRecipeMax)
+            if (waitingRecipeSOList.Count < waitingRecipeMax)
             {
-                RecipeSO waitingRecipeSO = recipeListSO.recipeSOList[UnityEngine.Random.Range(0,recipeListSO.recipeSOList.Count)];
+                RecipeSO waitingRecipeSO = recipeListSO.recipeSOList[UnityEngine.Random.Range(0, recipeListSO.recipeSOList.Count)];
                 waitingRecipeSOList.Add(waitingRecipeSO);
 
-                OnRecipeSpawned?.Invoke(this,EventArgs.Empty);
+                OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
             }
         }
     }
 
-    public void DeliverRecipe(PlateKitchenObject plateKitchenObject){
-        for(int i=0; i < waitingRecipeSOList.Count; i++){
+    public void DeliverRecipe(PlateKitchenObject plateKitchenObject)
+    {
+        for (int i = 0; i < waitingRecipeSOList.Count; i++)
+        {
             RecipeSO waitingRecipeSO = waitingRecipeSOList[i];
-            if(waitingRecipeSO.kitchenObjectSOList.Count == plateKitchenObject.GetKitchenObjectSOList().Count){
+            if (waitingRecipeSO.kitchenObjectSOList.Count == plateKitchenObject.GetKitchenObjectSOList().Count)
+            {
                 //Has same number og ingredients
 
                 bool plateContentsMatchesRecipe = true;
-                foreach(KitchenObjectSO recipeKitchenObjectSO in waitingRecipeSO.kitchenObjectSOList){
+                foreach (KitchenObjectSO recipeKitchenObjectSO in waitingRecipeSO.kitchenObjectSOList)
+                {
                     //all ingredient in recipe
                     bool ingredientFound = false;
-                    foreach(KitchenObjectSO plateKitchenObjectSO in plateKitchenObject.GetKitchenObjectSOList()){
+                    foreach (KitchenObjectSO plateKitchenObjectSO in plateKitchenObject.GetKitchenObjectSOList())
+                    {
                         //all ingredient in plate
                         print(plateKitchenObjectSO);
-                        
-                        if(plateKitchenObjectSO == recipeKitchenObjectSO){
+
+                        if (plateKitchenObjectSO == recipeKitchenObjectSO)
+                        {
                             //ingredient match
                             ingredientFound = true;
                             break;
                         }
                     }
-                    if(!ingredientFound){
+                    if (!ingredientFound)
+                    {
                         //This recipe was not found on plate
                         plateContentsMatchesRecipe = false;
                     }
                 }
-                if(plateContentsMatchesRecipe){
+                if (plateContentsMatchesRecipe)
+                {
                     //Player dirivered correct recipe
                     waitingRecipeSOList.RemoveAt(i);
 
-                    OnRecipeCompleted?.Invoke(this,EventArgs.Empty);
+                    OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
+                    OnRecipeSuccess?.Invoke(this, EventArgs.Empty);
+                    successRecipeAmount++;
                     return;
                 }
             }
         }
-
+        OnRecipeFailed?.Invoke(this, EventArgs.Empty);
         //No match found
         //Player cannot plate
     }
 
-    public List<RecipeSO> GetWaitingRecipeSOList(){
+    public List<RecipeSO> GetWaitingRecipeSOList()
+    {
         return waitingRecipeSOList;
+
+
+    }
+    public int GetSuccessRecipeAcount()
+    {
+        return successRecipeAmount;
     }
 }
